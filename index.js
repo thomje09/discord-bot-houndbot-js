@@ -1,6 +1,6 @@
 // ============================================================================================================
 // This is Hound4004's Discord bot called Houndbot4004 for his Discorder Server "Houndcord4004" 
-// This bot's index was last updated (3/29/2026)
+// This bot's index was last updated (11/12/2026)
 // ============================================================================================================
 
 // ============================================================================================================
@@ -43,7 +43,8 @@ const client = new Client({
 });
 
 const fs = require("fs");
-client.db = require("quick.db");
+const { QuickDB } = require("quick.db");
+client.db = new QuickDB();
 client.request = new (require("rss-parser"))();
 
 require('events').EventEmitter.defaultMaxListeners = 20;
@@ -76,7 +77,7 @@ client.on('shardReconnecting', (shardId) => {
 // ============================================================================================================
 
 const keepAlive = require('./server.js');
-client.config = require("./config.js");//for video notifier
+client.config = require("./config.js"); //for video notifier
 
 client.once(Events.ClientReady, c => {
   console.log(`✅ Logged in as ${c.user.tag}`);
@@ -86,18 +87,18 @@ client.once(Events.ClientReady, c => {
 });
 
 //========================================================================
-//start_up() function| run all functions | last Updated (3/29/2026)
+//start_up() function| run all functions | last Updated (11/12/2026)
 //========================================================================
 function start_up() {
   // (functions like swear _detect are called on the user input later in the code! 
-  
+
   console.log("📍 start_up: Starting reactionroles...");
   reactionroles();
-  
+
   console.log("📍 start_up: Starting handleUploads...");
-  handleUploads();
+  handleUploads().catch(console.error);;
   setInterval(handleUploads, 300000); // every 5 minutes
-  
+
   console.log("📍 start_up: Setting Random Holiday function...");
   Random_Holiday_of_the_Day();
   setInterval(Random_Holiday_of_the_Day, 12 * 60 * 60 * 1000); // Check every 12 hours
@@ -111,7 +112,7 @@ function start_up() {
 client.on('guildMemberAdd', member => {
   const welcome_channel = client.channels.cache.get('700732150529392741');
   welcome_channel.send(`<@${member.id}> Welcome to the server! Before you start, please check <#${695022777081528363}>`);
-  
+
   let Role_Testrole = member.guild.roles.cache.find(r => r.name === "DISCORD_ROLES_REACT_ROBOT_EMOJI_ID");
   member.roles.add(Role_Testrole).catch(console.error);
   console.log("welcome worked");
@@ -133,15 +134,16 @@ client.on('messageCreate', (message) => {
   triggerWords.forEach((word) => {
     if (message_content.includes(word) && message.author.id != 946745700966891550) {
       message.reply(message_content);
-    }})
-    if (message_content.includes("houndbot")){
-      message.react('🤖').catch(console.error);
     }
-  
+  })
+  if (message_content.includes("houndbot")) {
+    message.react('🤖').catch(console.error);
+  }
+
   if (message_content == "hi") {
     message.reply({ content: 'hello', allowedMentions: { repliedUser: false } });
   }
-  
+
   Swear_detect(message_content, message); //This calls to the swear detect function below. passes the message to said fuction
 });
 
@@ -150,7 +152,7 @@ client.on('messageCreate', (message) => {
 //========================================================================
 const recentSwears = {};
 
-function Swear_detect(message_content,message) {
+function Swear_detect(message_content, message) {
   const { bad_words } = require('./Swear_Bot_vocab.js');
   const userId = message.author.id;
   let message_contains_bad_word = false
@@ -163,15 +165,15 @@ function Swear_detect(message_content,message) {
     }
   }
 
-  if(message_contains_bad_word==true){
+  if (message_contains_bad_word == true) {
     const now = Date.now();   // Get current time
-   // Clean up old swears (keep only last 5 minutes)
+    // Clean up old swears (keep only last 5 minutes)
     if (!recentSwears[userId]) {
       recentSwears[userId] = [];
     }
     recentSwears[userId] = recentSwears[userId].filter(time => now - time < 300000); // 5 minutes
-        recentSwears[userId].push(now);
-    
+    recentSwears[userId].push(now);
+
     // Count swears in last 5 minutes
     const swearCount = recentSwears[userId].length;
     let swear_warning_Message_reply = "";
@@ -388,34 +390,34 @@ function Random_Holiday_of_the_Day() {
   const todayMonth = today.getMonth() + 1;  // 3 (number)
   const todayDay = today.getDate();         // 28 (number)
   const fullDate = today.toDateString();
-  
+
   // If we already posted today, stop
   if (lastHolidayDate === fullDate) return;
-  
+
   const holidayChannel = client.channels.cache.get(process.env.DISCORD_HOLLIDAY_CHAT_ID);
-  
+
   try {
     const data = fs.readFileSync('./Random Holidays.txt', 'utf8');
     const lines = data.split('\n');
-    
+
     let holidayMessage = "No special holiday found... Hmmm.. yell at Hound4004 to fix me!";
     for (const line of lines) {
       // Get the date part (first 5 characters like "03/28")
       const datePart = line.substring(0, 5);
       const fileMonth = parseInt(datePart.substring(0, 2));  // "03" → 3
       const fileDay = parseInt(datePart.substring(3, 5));    // "28" → 28
-      
+
       if ((fileMonth === todayMonth) && (fileDay === todayDay)) {
         holidayMessage = line.substring(6);
         break;
       }
     }
-    
+
     const formattedDate = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
     holidayChannel.send(`📅 **${formattedDate}**\n🎉 Today's Random Holiday: **${holidayMessage}**`);
     lastHolidayDate = fullDate;
     console.log(`📅 Sent holiday: ${holidayMessage}`);
-    
+
   } catch (error) {
     console.error('Holiday error:', error.message);
   }
@@ -425,10 +427,13 @@ function Random_Holiday_of_the_Day() {
 //========================================================================
 
 //========================================================================
-//Get Latest Hound4004 YouTube Video / detect video
+//Get Latest Hound4004 YouTube Video / detect video  - last updated (11/12/2026)
 //========================================================================
-function handleUploads() {
-  if (client.db.fetch(`postedVideos`) === null) client.db.set(`postedVideos`, []);
+async function handleUploads() {
+  const postedVideos = await client.db.get(`postedVideos`);
+  if (postedVideos === null || postedVideos === undefined) {
+    await client.db.set(`postedVideos`, []);
+  }
   console.log("Video_checked");
 
   const Gather_json_file_data = async () => {
@@ -437,13 +442,14 @@ function handleUploads() {
   };
 
   client.request.parseURL(`https://www.youtube.com/feeds/videos.xml?channel_id=${client.config.channel_id}`)
-    .then(data => {
-      if (client.db.fetch(`postedVideos`).includes(data.items[0].link)) return;
+    .then(async data => {
+      const posted = await client.db.get(`postedVideos`);
+      if (posted.includes(data.items[0].link)) return;
       else {
         //delete json.sqlite here?
-        client.db.set(`videoData`, data.items[0]);
-        client.db.push("postedVideos", data.items[0].link);
-        let parsed = client.db.fetch(`videoData`);
+        await client.db.set(`videoData`, data.items[0]);
+        await client.db.push("postedVideos", data.items[0].link);
+        let parsed = await client.db.get(`videoData`);
         let channel = client.channels.cache.get(client.config.Discord_Video_channel);
         if (!channel) return;
 
@@ -459,7 +465,7 @@ function handleUploads() {
               var delete_data = "\b";
               fs.appendFile('json.sqlite', delete_data,
                 // callback function
-                function(err) {
+                function (err) {
                   if (err) throw err;
                   // if no error
                   console.log("deleted data in json.sqlite sucsesfully");
@@ -471,7 +477,7 @@ function handleUploads() {
               var delete_data = "\b";
               fs.appendFile('json.sqlite', delete_data,
                 // callback function
-                function(err) {
+                function (err) {
                   if (err) throw err;
                   // if no error
                   console.log("deleted data in json.sqlite sucsesfully");
@@ -488,7 +494,7 @@ function handleUploads() {
         var title_check = /{title}/g;
         if (title_check == "chicken") { console.log("Cluck"); } else {
           console.log("test");
-          
+
           Gather_json_file_data().then(data_gathered => {
             console.log(data_gathered);
             if (data_gathered.includes("News")) {
@@ -534,7 +540,7 @@ Bot_Alive();
 function Bot_Alive() {
   login_do();
   keepAlive(); // keepAlive() on server.js
-} 
+}
 
 function login_do() {
   client.login(process.env.TOKEN)
