@@ -4,7 +4,7 @@
 // This is for mesage templates, and other changeable things used in the main index
 // ============================================================================================================
 
-/*
+
 module.exports = {
     Discord_Video_channel: process.env.DISCORD_Video_ID,
     messageTemplateMCN: "**<@&1107297102788300911>** **<@&1107294677171974207>**  **{author}** just Posted a News Video: **{title}**! **{url}** go check it out!👍",
@@ -13,7 +13,6 @@ module.exports = {
     channel_id: process.env.CHANNEL_Video_ID,
     watchInterval: 80000
 }
-/*
 
 
 // ============================================================================================================
@@ -38,7 +37,7 @@ module.exports = {
 //This is for specifically testing the video function.
 // ============================================================================================================
 
-
+/*
 module.exports = {
     Discord_Video_channel: process.env.DISCORD_Video_ID,
     messageTemplateMCN: "**Everyone** **<@&1107294677171974207>**  **{author}** just Posted a News Video: **{title}**! **{url}** go check it out!👍",
@@ -47,4 +46,4 @@ module.exports = {
     channel_id: process.env.CHANNEL_Video_ID,
     watchInterval: 80000
 }
-
+*/
