@@ -25,7 +25,6 @@ const client = new Client({
     ]
 });
 
-const fs = require("fs");
 const { QuickDB } = require("quick.db");
 client.db = new QuickDB();
 client.request = new (require("rss-parser"))();

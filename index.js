@@ -21,6 +21,8 @@ process.on('unhandledRejection', (reason, promise) => {
 // ============================================================================================================
 
 const { Events } = require('discord.js');
+const fs = require("fs");
+
 // now in client.js
 /* 
 const { Client, Intents, MessageButton, MessageActionRow, ButtonBuilder, ButtonStyle, MessageEmbed, EmbedBuilder, Partials, Events, Collection, WebhookClient, GatewayIntentBits, SlashCommandBuilder } = require('discord.js');
@@ -45,7 +47,6 @@ const client = new Client({
   ]
 });
 
-const fs = require("fs");
 const { QuickDB } = require("quick.db");
 client.db = new QuickDB();
 client.request = new (require("rss-parser"))();
