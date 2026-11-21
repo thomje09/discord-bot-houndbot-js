@@ -20,6 +20,7 @@ process.on('unhandledRejection', (reason, promise) => {
 
 // ============================================================================================================
 
+const { Events } = require('discord.js');
 // now in client.js
 /* 
 const { Client, Intents, MessageButton, MessageActionRow, ButtonBuilder, ButtonStyle, MessageEmbed, EmbedBuilder, Partials, Events, Collection, WebhookClient, GatewayIntentBits, SlashCommandBuilder } = require('discord.js');
