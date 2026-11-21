@@ -1,6 +1,6 @@
 // ============================================================================================================
 // This is Hound4004's Discord bot called Houndbot4004 for his Discorder Server "Houndcord4004" 
-// This bot's index was last updated (11/12/2026)
+// This bot's index was last updated (11/21/2026)
 // ============================================================================================================
 
 // ============================================================================================================
@@ -20,6 +20,8 @@ process.on('unhandledRejection', (reason, promise) => {
 
 // ============================================================================================================
 
+// now in client.js
+/* 
 const { Client, Intents, MessageButton, MessageActionRow, ButtonBuilder, ButtonStyle, MessageEmbed, EmbedBuilder, Partials, Events, Collection, WebhookClient, GatewayIntentBits, SlashCommandBuilder } = require('discord.js');
 
 const client = new Client({
@@ -48,6 +50,9 @@ client.db = new QuickDB();
 client.request = new (require("rss-parser"))();
 
 require('events').EventEmitter.defaultMaxListeners = 20;
+*/
+//New:
+const client = require('./src/client.js');
 
 
 // ============================================================================================================
@@ -77,7 +82,7 @@ client.on('shardReconnecting', (shardId) => {
 // ============================================================================================================
 
 const keepAlive = require('./server.js');
-client.config = require("./config.js"); //for video notifier
+client.config = require("./src/videoConfig.js"); //for video notifier
 
 client.once(Events.ClientReady, c => {
   console.log(`✅ Logged in as ${c.user.tag}`);
