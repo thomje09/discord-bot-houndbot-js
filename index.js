@@ -19,6 +19,8 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 
 // ============================================================================================================
+// Grab and start all needed and stand alone files Updated (11/21/2026)
+// ============================================================================================================
 const client = require('./src/client.js');
 const { Events } = require('discord.js');
 
@@ -28,7 +30,6 @@ require('./src/reactionRoles.js'); // run reaction rolls
 
 const { Random_Holiday_of_the_Day } = require('./src/holidays.js');
 const { handleUploads } = require('./src/youtube.js');
-
 
 
 // ============================================================================================================
