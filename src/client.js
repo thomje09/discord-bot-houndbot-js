@@ -28,7 +28,7 @@ const client = new Client({
 const { QuickDB } = require("quick.db");
 client.db = new QuickDB();
 client.request = new (require("rss-parser"))();
-client.config = require("./videoConfig.js");
+client.config = require("./videoConfig.js"); //for video notifier
 
 require('events').EventEmitter.defaultMaxListeners = 20;
 
