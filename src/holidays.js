@@ -22,7 +22,7 @@ function Random_Holiday_of_the_Day() {
     const holidayChannel = client.channels.cache.get(process.env.DISCORD_HOLLIDAY_CHAT_ID);
 
     try {
-        const data = fs.readFileSync('../Random Holidays.txt', 'utf8');
+        const data = fs.readFileSync('./Random Holidays.txt', 'utf8');
         const lines = data.split('\n');
 
         let holidayMessage = "No special holiday found... Hmmm.. yell at Hound4004 to fix me!";
